@@ -1,0 +1,1287 @@
+:root{
+  color-scheme:light;
+  --bg:#eef2f6;
+  --card:#ffffff;
+  --ink:#1d2a39;
+  --muted:#697789;
+  --line:#d6dee7;
+  --blue:#173f6d;
+  --blue2:#255f9a;
+  --blue-soft:#edf4fb;
+  --green:#176b4a;
+  --green-bg:#eef8f3;
+  --yellow:#805a00;
+  --yellow-bg:#fff8e4;
+  --red:#9a3030;
+  --red-bg:#fff0f0;
+  --shadow:0 10px 26px rgba(24,45,70,.08);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+button,input,select,textarea{font:inherit}
+.shell{width:min(1280px,calc(100% - 28px));margin:18px auto 34px}
+
+/* Cabeçalho padrão MinhaUTI */
+.hero{
+  display:flex;
+  justify-content:space-between;
+  gap:22px;
+  align-items:flex-start;
+  padding:24px 26px;
+  border-radius:18px;
+  color:#fff;
+  background:var(--blue);
+  box-shadow:var(--shadow);
+}
+.brand{font-size:12px;font-weight:900;letter-spacing:.16em;opacity:.82}
+.hero h1{margin:3px 0 6px;font-size:clamp(30px,4vw,44px)}
+.hero p{margin:0;max-width:760px;color:rgba(255,255,255,.88);font-size:16px;line-height:1.45}
+.local-badge{
+  flex:none;display:inline-flex;align-items:center;gap:8px;
+  padding:9px 13px;border-radius:999px;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.2);
+  font-size:13px;font-weight:800;
+}
+.local-badge span{width:9px;height:9px;border-radius:50%;background:#7ed0a5}
+.privacy-strip{
+  margin:14px 2px 18px;padding:12px 14px;border-radius:12px;
+  color:var(--blue);background:var(--blue-soft);border:1px solid #cbdceb;font-size:14px;
+}
+
+/* Estrutura geral */
+.app{
+  display:grid;
+  grid-template-columns:188px minmax(0,1fr);
+  gap:16px;
+  align-items:start;
+}
+.sidebar{
+  position:sticky;top:14px;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:16px 12px;
+  box-shadow:var(--shadow);
+  max-height:calc(100vh - 28px);
+  overflow:auto;
+}
+.sidebar h3{margin:0 0 12px;padding:0 4px;font-size:14px;color:#435165}
+.bed-list{display:flex;flex-direction:column;gap:7px}
+.bed-btn{
+  width:100%;display:flex;align-items:center;gap:9px;
+  padding:10px;border:1px solid var(--line);border-radius:10px;
+  background:#fff;color:var(--ink);font-weight:800;text-align:left;cursor:pointer;
+}
+.bed-btn:hover{background:#f7f9fb}
+.bed-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.bed-dot{width:9px;height:9px;border-radius:50%;background:#aeb8c2;flex:none}
+.bed-btn.active .bed-dot{background:#7ed0a5}
+
+.content{min-width:0}
+
+/* Barra de ações */
+.topbar{
+  display:flex;gap:8px;flex-wrap:wrap;
+  padding:12px;
+  margin-bottom:12px;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  box-shadow:var(--shadow);
+}
+button{
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:9px 12px;
+  background:#f5f7fa;
+  color:var(--ink);
+  font-weight:800;
+  cursor:pointer;
+}
+button:hover{background:#eef2f6}
+button.primary{background:var(--blue2);border-color:var(--blue2);color:#fff}
+button.primary:hover{filter:brightness(.96)}
+button.danger{background:#fff3f2;color:var(--red);border-color:#efc8c8}
+
+/* Navegação das etapas */
+.subtabs{
+  display:flex;gap:7px;flex-wrap:wrap;
+  margin-bottom:14px;
+}
+.subtabs button{
+  padding:9px 12px;
+  background:#fff;
+  color:#435165;
+  border:1px solid var(--line);
+}
+.subtabs button.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+
+.panel{display:none}
+.panel.active{display:block}
+
+.panel-step-title{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin:0 0 12px;
+  padding:0 2px;
+}
+.panel-step-title h2{margin:0;font-size:21px}
+.step{
+  display:inline-grid;
+  place-items:center;
+  width:28px;height:28px;flex:0 0 28px;
+  border-radius:50%;
+  background:var(--blue);
+  color:#fff;
+  font-weight:900;
+  font-size:14px;
+}
+
+/* Cards */
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:14px;
+  box-shadow:var(--shadow);
+}
+.card h2{margin:0 0 14px;font-size:19px;color:var(--ink)}
+.card h3{margin:16px 0 9px;font-size:15px;color:#35465b}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+label{display:block;font-size:13px;font-weight:800;color:#435165}
+input,select,textarea{
+  width:100%;
+  margin-top:5px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:10px 11px;
+  font-size:13px;
+  color:var(--ink);
+  background:#fff;
+  outline:none;
+}
+input:focus,select:focus,textarea:focus{
+  border-color:#7ca6cf;
+  box-shadow:0 0 0 3px rgba(37,95,154,.10);
+}
+textarea{min-height:95px;resize:vertical}
+.previous-text{min-height:240px}
+.memory-text{min-height:150px}
+.evolution{min-height:300px;line-height:1.5}
+.physical-exam-template{min-height:150px;line-height:1.5}
+
+.checks{display:flex;gap:8px;flex-wrap:wrap}
+.checks label,.check{
+  display:flex;align-items:center;gap:7px;
+  padding:9px 10px;
+  border:1px solid #e1e7ed;
+  border-radius:10px;
+  background:#f8fafc;
+  color:#435165;
+}
+.checks input,.check input{width:auto;margin:0}
+
+.lab-table{
+  display:grid;
+  grid-template-columns:180px minmax(120px,1fr);
+  gap:7px;
+  align-items:end;
+}
+.lab-head{text-align:center;font-size:12px;font-weight:800;color:#435165}
+.lab-label{font-size:13px;font-weight:800;padding-bottom:8px;color:#435165}
+.lab-label small{display:block;color:var(--muted);font-weight:500}
+
+.result{padding:11px 12px;margin-top:12px;border-radius:10px;font-size:13px;line-height:1.45}
+.result.ok{background:var(--green-bg);color:var(--green);border:1px solid #cbe7d8}
+.result.warn{background:var(--yellow-bg);color:var(--yellow);border:1px solid #eedca6}
+.result.muted,.muted{color:var(--muted);font-size:12px}
+.alert-high{background:var(--red-bg);border-left:5px solid var(--red);padding:10px;border-radius:9px;margin:7px 0}
+.alert-medium{background:var(--yellow-bg);border-left:5px solid #c98300;padding:10px;border-radius:9px;margin:7px 0}
+.alert-info{background:var(--blue-soft);border-left:5px solid var(--blue2);padding:10px;border-radius:9px;margin:7px 0}
+
+.dva-card,.extract-card{
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:13px;
+  margin:10px 0;
+  background:#fbfcfe;
+}
+.measure-row button{padding:7px}
+.hidden{display:none!important}
+.tool-header{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.tool-header>div{min-width:0}
+.small-note{font-size:12px;color:var(--muted)}
+.diagnosis-row{display:grid;grid-template-columns:34px 1fr;gap:8px;align-items:center;margin:7px 0}
+.diagnosis-index{font-weight:800;text-align:right}
+.device-row{display:grid;grid-template-columns:110px 1fr;gap:8px;align-items:center;margin:7px 0}
+.device-row .check{margin:0}
+.device-row input[type="text"]{margin:0}
+
+
+/* Identificação persistente do leito em edição — barreira de segurança */
+.active-bed-banner{
+  position:sticky;
+  top:8px;
+  z-index:30;
+  display:grid;
+  grid-template-columns:auto auto 1fr;
+  align-items:center;
+  gap:12px;
+  margin:0 0 12px;
+  padding:10px 14px;
+  border:1px solid #0f3559;
+  border-radius:12px;
+  background:var(--blue);
+  color:#fff;
+  box-shadow:0 8px 20px rgba(23,63,109,.18);
+}
+.active-bed-kicker{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.10em;
+  opacity:.86;
+}
+.active-bed-dot{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#7ed0a5;
+}
+#currentBedLabel{
+  font-size:20px;
+  line-height:1;
+  white-space:nowrap;
+}
+.active-bed-hint{
+  justify-self:end;
+  color:rgba(255,255,255,.82);
+  font-size:12px;
+  font-weight:650;
+  text-align:right;
+}
+
+@media(max-width:900px){
+  .app{grid-template-columns:1fr}
+  .sidebar{position:relative;top:auto;max-height:none}
+  .sidebar h3{display:none}
+  .bed-list{flex-direction:row;overflow:auto}
+  .bed-btn{min-width:116px}
+  .two{grid-template-columns:1fr}
+  .lab-table{grid-template-columns:115px minmax(90px,1fr)}
+}
+@media(max-width:620px){
+  .shell{width:min(100% - 18px,1280px);margin-top:9px}
+  .hero{flex-direction:column;padding:20px;border-radius:15px}
+  .hero h1{font-size:30px}
+  .topbar{flex-direction:column}
+  .topbar button,.topbar label{width:100%}
+  .topbar label button{width:100%}
+  .subtabs{display:grid;grid-template-columns:1fr 1fr}
+  .subtabs button{width:100%}
+}
+
+@media(max-width:620px){
+  .active-bed-banner{grid-template-columns:auto 1fr;gap:8px 10px;top:4px}
+  .active-bed-hint{grid-column:1 / -1;justify-self:start;text-align:left;font-size:11px}
+  #currentBedLabel{font-size:19px}
+}
+
+
+/* Importação opcional de dados do Auxiliar */
+.nursing-import-card{
+  border-color:#cbdceb;
+}
+.nursing-import-card h2{
+  margin-bottom:6px;
+}
+.nursing-note{
+  display:block;
+  margin:0 0 12px;
+}
+.nursing-aux-text{
+  min-height:170px;
+  font-family:"Cascadia Mono","Consolas",monospace;
+  font-size:13px;
+  line-height:1.55;
+}
+.nursing-import-options{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin:12px 0;
+}
+.nursing-import-options .check{
+  margin:0;
+}
+.nursing-import-button{
+  width:100%;
+  margin-top:0;
+}
+.temp-series-label{
+  display:block;
+  margin-bottom:10px;
+}
+
+
+.nursing-period-field{
+  display:block;
+  margin:12px 0;
+}
+.nursing-period-field select{
+  max-width:180px;
+}
+
+
+/* v5 — fluxo compacto para reduzir scroll */
+.shell{width:min(1440px,calc(100% - 20px));margin:10px auto 24px}
+.hero{padding:18px 22px}
+.hero h1{font-size:clamp(28px,3vw,38px)}
+.hero p{font-size:14px}
+.privacy-strip{margin:10px 2px 12px;padding:9px 12px}
+
+.app{grid-template-columns:170px minmax(0,1fr);gap:12px}
+.sidebar{padding:12px 10px;border-radius:15px}
+.bed-list{gap:5px}
+.bed-btn{padding:8px 9px}
+
+.topbar{gap:7px;padding:9px;margin-bottom:8px;align-items:center}
+.topbar button{padding:8px 11px}
+#importFile{display:none!important}
+
+.active-bed-banner{top:5px;margin-bottom:5px;padding:8px 12px;min-height:44px}
+#currentBedLabel{font-size:18px}
+
+.subtabs{
+  position:sticky;
+  top:54px;
+  z-index:25;
+  margin:0 0 9px;
+  padding:5px 0;
+  background:rgba(238,242,246,.96);
+  backdrop-filter:blur(6px);
+  flex-wrap:nowrap;
+  overflow-x:auto;
+  scrollbar-width:thin;
+}
+.subtabs button{flex:0 0 auto;padding:7px 10px;white-space:nowrap;font-size:12px}
+
+.panel-step-title{margin-bottom:8px}
+.panel-step-title h2{font-size:19px}
+.step{width:26px;height:26px;flex-basis:26px}
+
+.card{padding:13px;margin-bottom:9px;border-radius:14px}
+.card h2{margin-bottom:9px;font-size:17px}
+.card h3{margin:10px 0 6px;font-size:14px}
+.grid{grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:7px}
+.compact-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+label{font-size:12px}
+input,select,textarea{margin-top:3px;padding:7px 9px;border-radius:8px;font-size:12px}
+textarea{min-height:76px}
+.previous-text{min-height:145px}
+.nursing-aux-text{min-height:125px}
+.memory-text{min-height:105px}
+.evolution{min-height:240px}
+.physical-exam-template{min-height:240px}
+.result{padding:8px 10px;margin-top:8px;font-size:12px}
+.checks{gap:6px}
+.checks label,.check{padding:7px 8px}
+
+.previous-grid,.renal-layout,.labs-layout,.evolution-grid{
+  display:grid;gap:9px;align-items:start;
+}
+.previous-grid{grid-template-columns:1fr 1fr}
+.renal-layout{grid-template-columns:minmax(0,1.3fr) minmax(300px,.7fr)}
+.labs-layout{grid-template-columns:minmax(0,1.25fr) minmax(360px,.75fr)}
+.evolution-grid{grid-template-columns:1fr 1fr}
+
+.clinical-triad{
+  display:grid;
+  grid-template-columns:.82fr 1.35fr 1fr;
+  gap:9px;
+  align-items:start;
+  margin-bottom:9px;
+}
+.clinical-triad .card{height:100%;margin:0}
+.span-all{grid-column:1 / -1}
+.conditional-fields{margin-top:1px}
+
+.dva-section{margin-bottom:9px}
+#dvaFields:not(.hidden){
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(255px,1fr));
+  gap:8px;
+  margin-top:8px;
+}
+.dva-card{margin:0;padding:10px}
+.dva-card .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.dva-card .result{margin-top:6px}
+
+.lab-table{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:8px;
+  align-items:start;
+}
+.lab-field{min-width:0}
+.lab-field small{display:block;color:var(--muted);font-weight:500;min-height:15px}
+
+.gasometry-note{margin:0 0 7px}
+.gasometry-text{
+  min-height:130px;
+  font-family:"Cascadia Mono","Consolas",monospace;
+  line-height:1.4;
+}
+.clinical-details{margin-top:7px;border-top:1px solid var(--line);padding-top:7px}
+.clinical-details summary{cursor:pointer;color:var(--blue);font-size:12px;font-weight:800}
+
+.nursing-period-field{margin:8px 0}
+.nursing-import-button{padding:8px}
+.temp-series-label{margin-bottom:6px}
+.device-row{margin:5px 0}
+.device-row input[type="text"]{padding-top:7px;padding-bottom:7px}
+
+@media(max-width:1150px){
+  .clinical-triad{grid-template-columns:1fr 1fr}
+  .clinical-triad .card:last-child{grid-column:1 / -1}
+  .labs-layout{grid-template-columns:1fr}
+}
+@media(max-width:900px){
+  .previous-grid,.renal-layout,.evolution-grid{grid-template-columns:1fr}
+  .clinical-triad{grid-template-columns:1fr}
+  .clinical-triad .card:last-child{grid-column:auto}
+  .lab-table{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:620px){
+  .lab-table{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .compact-grid,.dva-card .grid{grid-template-columns:1fr}
+  .subtabs{display:flex;top:72px}
+  .topbar{display:grid;grid-template-columns:1fr 1fr}
+  .topbar button{width:100%}
+}
+
+
+/* v6 — reorganização de fluxo */
+.care-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  align-items:start;
+}
+.care-grid .card{margin:0}
+
+.renal-core-grid{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+}
+
+#oxygenFlowWrap{
+  align-self:end;
+}
+
+#panel-dva .dva-section{
+  margin-bottom:0;
+}
+#panel-dva #dvaFields:not(.hidden){
+  grid-template-columns:repeat(3,minmax(240px,1fr));
+}
+
+@media(max-width:1150px){
+  #panel-dva #dvaFields:not(.hidden){
+    grid-template-columns:repeat(2,minmax(240px,1fr));
+  }
+}
+@media(max-width:900px){
+  .care-grid{grid-template-columns:1fr}
+  .renal-core-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:620px){
+  .renal-core-grid{grid-template-columns:1fr}
+  #panel-dva #dvaFields:not(.hidden){grid-template-columns:1fr}
+}
+
+
+/* v6.2 — maior área de trabalho na aba Evolução */
+#panel-evolution .evolution,
+#panel-evolution .physical-exam-template{
+  min-height:430px;
+  height:clamp(430px,54vh,660px);
+}
+
+#panel-evolution .evolution-grid{
+  align-items:stretch;
+}
+
+#panel-evolution .evolution-grid > .card{
+  display:flex;
+  flex-direction:column;
+  height:100%;
+}
+
+#panel-evolution .evolution-grid textarea{
+  flex:1 1 auto;
+}
+
+.privacy-strip{
+  line-height:1.45;
+}
+
+@media(max-width:900px){
+  #panel-evolution .evolution,
+  #panel-evolution .physical-exam-template{
+    min-height:340px;
+    height:44vh;
+  }
+}
+
+
+/* v6.3 — saída final única e aviso de aceite */
+.tool-locked{
+  overflow:hidden;
+}
+
+.usage-gate{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  display:grid;
+  place-items:center;
+  padding:20px;
+  background:rgba(12,29,49,.66);
+  backdrop-filter:blur(5px);
+  transition:opacity .18s ease;
+}
+
+.usage-gate.accepted{
+  opacity:0;
+  pointer-events:none;
+}
+
+.usage-gate-card{
+  width:min(680px,100%);
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:26px;
+  box-shadow:0 24px 70px rgba(0,0,0,.28);
+}
+
+.usage-gate-icon{
+  display:grid;
+  place-items:center;
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  margin-bottom:12px;
+  background:#fff3cd;
+  color:#805a00;
+  font-size:24px;
+  font-weight:900;
+  border:1px solid #ead79c;
+}
+
+.usage-gate-card h2{
+  margin:0 0 10px;
+  font-size:25px;
+  color:var(--blue);
+}
+
+.usage-gate-card p{
+  margin:0 0 15px;
+  line-height:1.55;
+  font-size:15px;
+}
+
+.policy-link{
+  display:inline-flex;
+  margin-bottom:16px;
+  color:var(--blue2);
+  font-weight:850;
+  text-decoration:none;
+}
+
+.policy-link:hover{
+  text-decoration:underline;
+}
+
+.usage-agreement{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin:4px 0 15px;
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#f8fafc;
+  cursor:pointer;
+  font-size:14px;
+}
+
+.usage-agreement input{
+  width:auto;
+  margin:2px 0 0;
+  flex:none;
+}
+
+.usage-enter{
+  width:100%;
+  padding:11px 14px;
+}
+
+.usage-enter:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+  filter:none;
+}
+
+#oxygenFio2Suggestion a{
+  color:inherit;
+  font-weight:800;
+}
+
+#panel-evolution .final-output-card{
+  width:100%;
+}
+
+#panel-evolution .final-output{
+  min-height:560px;
+  height:clamp(560px,68vh,820px);
+  line-height:1.5;
+}
+
+@media(max-width:900px){
+  #panel-evolution .final-output{
+    min-height:440px;
+    height:58vh;
+  }
+}
+
+
+/* v6.4 — campos condicionais de AVM */
+#peepWrap,
+#ventModeWrap{
+  align-self:end;
+}
+
+
+/* ==========================================================
+   v6.5 — navegação global MinhaUTI à direita
+   Esquerda = leitos | Centro = ferramenta | Direita = módulos
+   ========================================================== */
+
+:root{
+  --module-nav-width:172px;
+  --module-nav-gap:12px;
+}
+
+/* Reserva espaço para a navegação global fixa */
+body.with-global-module-nav{
+  padding-right:calc(var(--module-nav-width) + var(--module-nav-gap));
+}
+
+/* Puxa o conteúdo útil para a esquerda e reduz desperdício lateral */
+body.with-global-module-nav .wrap,
+body.with-global-module-nav .app-shell,
+body.with-global-module-nav main{
+  max-width:none;
+}
+
+/* Quando existir um container central com margem automática,
+   reduz o espaço à direita sem interferir na coluna de leitos. */
+body.with-global-module-nav .wrap{
+  margin-left:12px;
+  margin-right:0;
+  width:auto;
+}
+
+/* Barra global */
+.global-module-nav{
+  position:fixed;
+  top:12px;
+  right:12px;
+  bottom:12px;
+  z-index:850;
+  width:var(--module-nav-width);
+  pointer-events:none;
+}
+
+.global-module-nav-inner{
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-shadow:var(--shadow);
+  pointer-events:auto;
+}
+
+.module-nav-brand{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:15px 13px 12px;
+  border-bottom:1px solid var(--line);
+  color:var(--blue);
+  font-size:12px;
+  font-weight:950;
+  letter-spacing:.12em;
+}
+
+.module-nav-brand-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#21a366;
+  box-shadow:0 0 0 4px rgba(33,163,102,.10);
+  flex:none;
+}
+
+.module-nav-list{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  padding:10px 8px;
+}
+
+.module-nav-item{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-height:42px;
+  padding:9px 10px;
+  border:1px solid transparent;
+  border-radius:10px;
+  color:#45576b;
+  text-decoration:none;
+  font-size:13px;
+  font-weight:760;
+  line-height:1.2;
+  transition:background .14s ease,border-color .14s ease,color .14s ease,transform .14s ease;
+}
+
+.module-nav-item:hover{
+  background:var(--blue-soft);
+  border-color:#d3e1ef;
+  color:var(--blue);
+  transform:translateX(-1px);
+}
+
+.module-nav-item.active{
+  background:var(--blue);
+  color:#fff;
+  border-color:var(--blue);
+  box-shadow:0 6px 14px rgba(23,63,109,.16);
+}
+
+.module-nav-icon{
+  width:20px;
+  flex:none;
+  text-align:center;
+  font-size:15px;
+  font-weight:900;
+}
+
+.module-nav-text{
+  min-width:0;
+}
+
+.module-nav-footer{
+  margin-top:auto;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:11px 12px;
+  border-top:1px solid var(--line);
+  color:var(--muted);
+  font-size:11px;
+  font-weight:700;
+}
+
+.module-nav-status-dot{
+  width:7px;
+  height:7px;
+  flex:none;
+  border-radius:50%;
+  background:#21a366;
+}
+
+/* A navegação de leitos continua sendo o contexto clínico à esquerda */
+body.with-global-module-nav .beds-sidebar,
+body.with-global-module-nav .sidebar{
+  flex-shrink:0;
+}
+
+/* Tablet: barra mais estreita */
+@media (max-width:1180px){
+  :root{
+    --module-nav-width:148px;
+  }
+
+  .module-nav-item{
+    padding-left:8px;
+    padding-right:8px;
+    font-size:12px;
+  }
+
+  .module-nav-brand{
+    font-size:11px;
+  }
+}
+
+/* Em telas menores vira barra horizontal inferior para não esmagar o conteúdo clínico */
+@media (max-width:920px){
+  body.with-global-module-nav{
+    padding-right:0;
+    padding-bottom:72px;
+  }
+
+  body.with-global-module-nav .wrap{
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .global-module-nav{
+    top:auto;
+    left:8px;
+    right:8px;
+    bottom:8px;
+    width:auto;
+    height:58px;
+  }
+
+  .global-module-nav-inner{
+    flex-direction:row;
+    align-items:center;
+    border-radius:14px;
+  }
+
+  .module-nav-brand,
+  .module-nav-footer{
+    display:none;
+  }
+
+  .module-nav-list{
+    width:100%;
+    flex-direction:row;
+    align-items:stretch;
+    gap:4px;
+    padding:6px;
+    overflow-x:auto;
+  }
+
+  .module-nav-item{
+    flex:1 0 auto;
+    justify-content:center;
+    min-width:95px;
+    min-height:44px;
+    padding:7px 9px;
+  }
+}
+
+/* Celular: privilegia ícones e nomes curtos */
+@media (max-width:620px){
+  .module-nav-item{
+    min-width:72px;
+    gap:5px;
+    font-size:11px;
+  }
+
+  .module-nav-icon{
+    width:16px;
+  }
+}
+
+
+/* ==========================================================
+   v9 — Desktop amplo: usar largura para economizar altura
+   ========================================================== */
+
+.device-grid-v9{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 12px;align-items:start}
+.device-column-v9{display:grid;grid-template-rows:auto auto;gap:4px;min-width:0}
+.device-grid-v9 .device-row{margin:0;grid-template-columns:92px minmax(0,1fr);gap:6px}
+.device-grid-v9 .device-row .check{min-width:0}
+
+/* Abas nunca exigem arrastar horizontalmente no desktop. */
+.subtabs{flex-wrap:wrap!important;overflow-x:visible!important;scrollbar-width:none!important}
+.subtabs::-webkit-scrollbar{display:none!important}
+
+@media (min-width:1200px){
+  html,body{overflow-x:hidden!important}
+  .shell{
+    width:calc(100% - 12px)!important;
+    max-width:none!important;
+    margin:6px auto 14px!important;
+  }
+  .hero.muti-main-header{
+    min-height:70px!important;
+    padding:9px 18px!important;
+    border-radius:0 0 16px 16px!important;
+    align-items:center!important;
+  }
+  .muti-logo{width:46px!important;height:46px!important}
+  .muti-wordmark{font-size:31px!important}
+  .muti-head-slogan{font-size:15px!important;line-height:1.22!important}
+  .muti-head-local{padding:7px 11px!important;font-size:12px!important}
+  .privacy-strip{
+    margin:6px 2px 7px!important;
+    padding:6px 10px!important;
+    font-size:11px!important;
+    line-height:1.25!important;
+  }
+  .app{
+    grid-template-columns:160px minmax(0,1fr) 276px!important;
+    gap:8px!important;
+    align-items:start!important;
+  }
+  .sidebar{padding:9px 8px!important;border-radius:12px!important;top:6px!important;max-height:calc(100vh - 12px)!important}
+  .beds-head{margin-bottom:6px!important}.beds-head h3{font-size:12px!important}
+  .beds-actions button{width:28px!important;height:28px!important}
+  .bed-list{gap:4px!important}.bed-btn{min-height:36px!important;padding:6px 7px!important;font-size:12px!important}
+  .bed-dot{width:7px!important;height:7px!important}
+  .global-module-nav{width:276px!important;top:6px!important}
+  .global-module-nav-inner{min-height:0!important;height:auto!important;max-height:calc(100vh - 12px)!important;border-radius:12px!important}
+  .module-nav-brand{padding:10px 12px!important;font-size:13px!important}
+  .module-nav-list{gap:5px!important;padding:7px!important}
+  .module-nav-item{min-height:54px!important;padding:7px 9px!important;grid-template-columns:34px 1fr 14px!important}
+  .module-nav-item b{font-size:13px!important}.module-nav-item small{font-size:9.5px!important}.module-nav-icon{font-size:21px!important}.module-chevron{font-size:21px!important}
+  .module-nav-footer{padding:7px 10px!important;font-size:10px!important}
+
+  .content{min-width:0!important}
+  .topbar{
+    display:flex!important;flex-wrap:nowrap!important;gap:5px!important;
+    padding:6px 7px!important;margin-bottom:6px!important;border-radius:11px!important;
+  }
+  .topbar button{padding:6px 9px!important;font-size:11px!important;white-space:nowrap!important}
+  .active-bed-banner{
+    position:sticky!important;top:4px!important;min-height:36px!important;
+    padding:6px 10px!important;margin-bottom:5px!important;border-radius:9px!important;
+    grid-template-columns:auto auto 1fr!important;
+  }
+  .active-bed-kicker{font-size:10px!important}.active-bed-dot{width:7px!important;height:7px!important}
+  #currentBedLabel{font-size:15px!important}.active-bed-hint{font-size:10px!important}
+
+  .subtabs{
+    position:sticky!important;top:44px!important;z-index:25!important;
+    display:flex!important;gap:4px!important;margin:0 0 6px!important;padding:3px 0!important;
+    background:rgba(238,242,246,.96)!important;backdrop-filter:blur(6px)!important;
+  }
+  .subtabs button{padding:5px 7px!important;font-size:10.5px!important;line-height:1.1!important;white-space:nowrap!important;flex:0 1 auto!important}
+
+  .panel-step-title{margin-bottom:5px!important}.panel-step-title h2{font-size:17px!important}.step{width:23px!important;height:23px!important;flex-basis:23px!important;font-size:12px!important}
+  .card{padding:9px 10px!important;margin-bottom:6px!important;border-radius:11px!important}
+  .card h2{font-size:15px!important;margin-bottom:6px!important}.card h3{font-size:12px!important;margin:7px 0 4px!important}
+  label{font-size:10.5px!important}
+  input,select,textarea{margin-top:2px!important;padding:5px 7px!important;font-size:11px!important;border-radius:7px!important}
+  .grid{gap:5px!important}
+  .result{padding:6px 8px!important;margin-top:5px!important;font-size:10.5px!important;line-height:1.35!important}
+
+  /* Paciente: todos os dados principais na mesma linha em telas amplas. */
+  #panel-patient .card > .grid{grid-template-columns:.7fr .78fr .92fr 1.05fr 1.15fr .58fr!important;align-items:end!important}
+  #panel-patient .memory-text{
+  min-height:230px!important;
+  height:230px!important;
+  max-height:none!important;
+  resize:vertical!important;
+  overflow:auto!important;
+}
+  .device-grid-v9{gap:5px 9px!important}
+  .device-grid-v9 .device-row{grid-template-columns:78px minmax(0,1fr)!important}
+  .device-grid-v9 .device-row input[type=text]{padding-top:5px!important;padding-bottom:5px!important}
+  .device-grid-v9 .check{padding:5px 6px!important;font-size:10px!important}
+
+  /* Evolução anterior: entrada e auxiliar lado a lado, mais densos. */
+  .previous-grid{grid-template-columns:1fr 1fr!important;gap:7px!important}
+  .previous-text{
+  min-height:300px!important;
+  height:300px!important;
+  max-height:none!important;
+  resize:vertical!important;
+  overflow:auto!important;
+}
+  .nursing-aux-text{min-height:92px!important;height:clamp(92px,15vh,145px)!important}
+
+  /* Hemo/Resp/Neuro em três colunas permanentes no desktop. */
+  .clinical-triad{grid-template-columns:.85fr 1.35fr 1fr!important;gap:7px!important;margin-bottom:6px!important}
+  .compact-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:5px!important}
+
+  /* DVA: até 3 drogas por linha. */
+  #panel-dva #dvaFields:not(.hidden){grid-template-columns:repeat(3,minmax(210px,1fr))!important;gap:6px!important;margin-top:5px!important}
+  .dva-card{padding:7px!important}.dva-card .grid{gap:4px!important}
+
+  /* Renal ocupa largura; HGT/Temperatura já formam dois subblocos. */
+  .renal-layout{grid-template-columns:minmax(0,1.4fr) minmax(420px,.8fr)!important;gap:7px!important}
+  .renal-core-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:5px!important}
+  .two{gap:7px!important}
+
+  /* Laboratório: seis exames por linha em telas amplas. */
+  .labs-layout{grid-template-columns:minmax(0,1.55fr) minmax(330px,.65fr)!important;gap:7px!important}
+  .lab-table{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:5px!important}
+  .gasometry-text{min-height:105px!important;height:clamp(105px,18vh,165px)!important}
+
+  /* Sintomas e profilaxias lado a lado, sem altura ociosa. */
+  .care-grid{grid-template-columns:1.25fr .75fr!important;gap:7px!important}
+  #panel-care textarea{min-height:118px!important;height:clamp(118px,21vh,190px)!important}
+  .checks{gap:4px!important}.checks label,.check{padding:5px 6px!important;font-size:10.5px!important}
+
+  /* Checklist usa duas colunas para prioridades e alertas quando existirem. */
+  #smartChecklist{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important;margin-top:7px!important}
+  #smartChecklist > *{margin:0!important;min-width:0!important}
+
+  /* Evolução usa a largura e a altura remanescente da viewport. */
+  #panel-evolution .final-output{min-height:360px!important;height:calc(100vh - 255px)!important;max-height:680px!important}
+
+  /* Módulos complementares usam toda a área central, sem max-width artificial. */
+  .module-frame-wrap{min-height:520px!important}
+  .module-frame-wrap iframe{width:100%!important;min-height:520px!important}
+}
+
+@media (min-width:1550px){
+  .app{grid-template-columns:158px minmax(0,1fr) 264px!important}
+  .global-module-nav{width:264px!important}
+  .subtabs button{font-size:10.5px!important;padding-left:8px!important;padding-right:8px!important}
+}
+
+@media (min-width:1200px) and (max-width:1399px){
+  .app{grid-template-columns:154px minmax(0,1fr) 246px!important}
+  .global-module-nav{width:246px!important}
+  .module-nav-item small{display:none!important}
+  #panel-patient .card > .grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .device-grid-v9{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .lab-table{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+  .renal-layout{grid-template-columns:1.25fr .75fr!important}
+}
+
+@media (max-width:1199px){
+  .device-grid-v9{grid-template-columns:1fr!important}
+  .device-column-v9{gap:4px!important}
+}
+
+/* v10.2 — compactação sem sacrificar legibilidade */
+@media(min-width:1200px){
+ body{font-size:14px!important}
+ input,select,textarea{font-size:13.5px!important}
+ button{font-size:13px!important}
+ .subtabs button{font-size:12.5px!important}
+ .checks label,.check{font-size:12px!important}
+ .module-nav-item{font-size:13px!important}
+ .module-nav-item small{font-size:11.5px!important}
+ .section-title,.card-title h2,h2{line-height:1.25}
+}
+@media(min-width:1550px){.subtabs button{font-size:12.5px!important}}
+
+/* Ajuste tipográfico do MinhaUTI principal */
+body { font-size: 17px; }
+label, input, select, textarea, button { font-size: 16px; }
+.tabs button, .tab { font-size: 15px; }
+h2 { font-size: 23px; }
+h3 { font-size: 18px; }
+
+
+/* Main — desktop compacto em tela física estreita */
+body.compact-desktop .shell{
+  width:calc(100% - 12px)!important;
+  margin:6px auto 84px!important;
+}
+body.compact-desktop .muti-main-header{
+  min-height:auto!important;
+  padding:10px 12px!important;
+}
+body.compact-desktop .muti-head-slogan{
+  display:none!important;
+}
+body.compact-desktop .privacy-strip{
+  font-size:10px!important;
+  padding:6px 8px!important;
+  line-height:1.25!important;
+}
+body.compact-desktop .app{
+  display:grid!important;
+  grid-template-columns:128px minmax(0,1fr)!important;
+  gap:8px!important;
+  align-items:start!important;
+}
+body.compact-desktop .sidebar{
+  position:sticky!important;
+  top:4px!important;
+  padding:8px 6px!important;
+  border-radius:10px!important;
+  max-height:none!important;
+  overflow:visible!important;
+}
+body.compact-desktop .beds-head{
+  margin-bottom:5px!important;
+}
+body.compact-desktop .beds-head h3{
+  font-size:10px!important;
+}
+body.compact-desktop .bed-list{
+  gap:3px!important;
+}
+body.compact-desktop .bed-btn{
+  min-height:31px!important;
+  padding:5px 6px!important;
+  font-size:11px!important;
+}
+body.compact-desktop .content{
+  min-width:0!important;
+}
+body.compact-desktop .topbar{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  gap:4px!important;
+  padding:5px!important;
+  margin-bottom:5px!important;
+}
+body.compact-desktop .topbar button{
+  padding:5px 7px!important;
+  font-size:10px!important;
+}
+body.compact-desktop .active-bed-banner{
+  min-height:34px!important;
+  padding:5px 8px!important;
+  margin-bottom:4px!important;
+  grid-template-columns:auto auto 1fr!important;
+}
+body.compact-desktop .active-bed-kicker{
+  font-size:9px!important;
+}
+body.compact-desktop #currentBedLabel{
+  font-size:14px!important;
+}
+body.compact-desktop .active-bed-hint{
+  font-size:9px!important;
+}
+body.compact-desktop .subtabs{
+  position:static!important;
+  display:flex!important;
+  flex-wrap:wrap!important;
+  gap:3px!important;
+  overflow:visible!important;
+  margin-bottom:5px!important;
+  padding:0!important;
+}
+body.compact-desktop .subtabs button{
+  padding:4px 6px!important;
+  font-size:9px!important;
+}
+body.compact-desktop .panel-step-title{
+  margin-bottom:5px!important;
+}
+body.compact-desktop .panel-step-title h2{
+  font-size:16px!important;
+}
+body.compact-desktop .step{
+  width:20px!important;
+  height:20px!important;
+  flex-basis:20px!important;
+  font-size:10px!important;
+}
+body.compact-desktop .card{
+  padding:8px!important;
+  margin-bottom:6px!important;
+  border-radius:10px!important;
+}
+body.compact-desktop .grid{
+  gap:5px!important;
+}
+body.compact-desktop label{
+  font-size:10px!important;
+}
+body.compact-desktop input,
+body.compact-desktop select,
+body.compact-desktop textarea{
+  font-size:11px!important;
+  padding:6px 7px!important;
+}
+body.compact-desktop .memory-text{
+  min-height:100px!important;
+}
+body.compact-desktop .device-row{
+  margin:4px 0!important;
+}
+
+/* Paciente: hipóteses maiores + dispositivos ao lado em 2 colunas */
+.patient-lower-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1.15fr) minmax(520px,.85fr);
+  gap:14px;
+  align-items:start;
+  margin-top:8px;
+}
+.patient-lower-layout h3{margin-top:0;}
+.diagnoses-text-large{
+  min-height:190px !important;
+  height:190px;
+  resize:vertical !important;
+}
+.device-grid-2col{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:7px 8px;
+}
+.device-grid-2col .device-row{
+  display:grid;
+  grid-template-columns:82px minmax(0,1fr);
+  gap:6px;
+  align-items:center;
+  margin:0;
+}
+.device-grid-2col .device-row .check{
+  min-width:0;
+}
+.device-grid-2col .device-row input[type="text"]{
+  min-width:0;
+  width:100%;
+}
+@media (max-width:1180px){
+  .patient-lower-layout{grid-template-columns:1fr;}
+  .device-grid-2col{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media (max-width:700px){
+  .device-grid-2col{grid-template-columns:1fr;}
+  .diagnoses-text-large{min-height:160px!important;height:160px;}
+}
+/* No desktop compacto do celular, empilhar para preservar legibilidade */
+body.compact-desktop .patient-lower-layout{
+  grid-template-columns:1fr!important;
+  gap:7px!important;
+}
+body.compact-desktop .diagnoses-text-large{
+  min-height:130px!important;
+  height:130px;
+}
+body.compact-desktop .device-grid-2col{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:4px 5px!important;
+}
+body.compact-desktop .device-grid-2col .device-row{
+  grid-template-columns:66px minmax(0,1fr)!important;
+}
+
+
+/* Hipóteses diagnósticas: espaço confortável para pelo menos 5 linhas */
+.diagnoses-text-large{
+  min-height:230px !important;
+  height:230px;
+  resize:vertical !important;
+}
+
+/* Mantém altura útil também no desktop compacto em celular */
+body.compact-desktop .diagnoses-text-large{
+  min-height:180px !important;
+  height:180px;
+  resize:vertical !important;
+}
