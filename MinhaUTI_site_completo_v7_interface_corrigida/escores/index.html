@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="no-referrer" name="referrer"/>
+<meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"/>
+<meta content="no-cache" http-equiv="Pragma"/>
+<meta content="0" http-equiv="Expires"/>
+<title>MinhaUTI — Escores</title>
+<link href="style.css?v=2" rel="stylesheet"/>
+  <link rel="stylesheet" href="../global.css">
+</head>
+<body class="with-global-module-nav">
+<main class="shell">
+<header class="hero">
+<div class="hero-copy">
+<div class="brand-kicker">MINHAUTI</div>
+<h1>Escores</h1>
+<p>Seleção rápida e cálculo de escores úteis em terapia intensiva e emergência.</p>
+</div>
+<div aria-label="Processamento local" class="local-badge">
+<span class="local-dot"></span>
+<span>Processamento local</span>
+</div>
+</header>
+<div class="privacy-strip">
+<strong>Processamento local.</strong> O módulo pode ler o leito salvo pelo MinhaUTI no armazenamento
+      local deste navegador para preencher campos e sugerir escores. Esses dados não são enviados ao servidor.
+    </div>
+<section class="score-layout score-layout-simple">
+<section class="workspace">
+<article class="card selector-card">
+<div class="card-titlebar">
+<div>
+<span class="step">1</span>
+<div>
+<h2>Escolher escore</h2>
+<p>Digite o nome, sigla ou situação clínica. O escore correspondente aparece imediatamente para seleção.</p>
+</div>
+</div>
+</div>
+<div class="search-box">
+<input aria-autocomplete="list" aria-controls="scoreSuggestions" autocomplete="off" id="scoreSearch" placeholder="Comece a digitar: SOFA, sepse, TEP, pneumonia..." type="text"/>
+<div class="autocomplete hidden" id="scoreSuggestions" role="listbox"></div>
+</div>
+</article>
+<article class="card calculator-card" id="calculatorCard">
+<div class="empty-calculator" id="emptyCalculator">
+<div class="empty-icon">▦</div>
+<strong>Selecione um escore acima.</strong>
+<span>O formulário aparecerá aqui. Quando houver dados compatíveis no leito ativo, eles serão pré-preenchidos.</span>
+</div>
+<div class="hidden" id="calculatorContent"></div>
+</article>
+</section>
+</section>
+</main>
+<aside aria-label="Módulos MinhaUTI" class="global-module-nav" id="dadosutiGlobalNav">
+<div class="global-module-nav-inner">
+<div class="module-nav-brand">
+<span class="module-nav-brand-dot"></span>
+<span>MINHAUTI</span>
+</div>
+<nav class="module-nav-list">
+<a class="module-nav-item" href="/">
+<span class="module-nav-icon">▣</span><span class="module-nav-text">Minha UTI</span>
+</a>
+<a class="module-nav-item" href="/gasometria/">
+<span class="module-nav-icon">◉</span><span class="module-nav-text">Gasometria</span>
+</a>
+<a class="module-nav-item" href="/auxiliar/">
+<span class="module-nav-icon">▤</span><span class="module-nav-text">Auxiliar de dados</span>
+</a>
+<a class="module-nav-item" href="/npt/">
+<span class="module-nav-icon">◆</span><span class="module-nav-text">NPT</span>
+</a>
+<a class="module-nav-item" href="/tfg-antibiotico/"><span class="module-nav-icon">Σ</span><span class="module-nav-text">TFG e ajuste ATB</span></a><a aria-current="page" class="module-nav-item active" href="/escores/">
+<span class="module-nav-icon">▦</span><span class="module-nav-text">Escores</span>
+</a>
+</nav>
+<div class="module-nav-footer">
+<span class="module-nav-status-dot"></span><span>Processamento local</span>
+</div>
+</div>
+</aside>
+<script src="app.js?v=2"></script>
+</body>
+</html>

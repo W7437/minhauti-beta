@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>MinhaUTI — TFG e ajuste Antibiótico</title>
+<link rel="stylesheet" href="style.css?v=1">
+  <link rel="stylesheet" href="../global.css">
+</head>
+<body class="with-global-module-nav">
+<main class="shell">
+<header class="hero">
+  <div class="hero-copy">
+    <div class="brand-kicker">MINHAUTI</div>
+    <h1>TFG e ajuste Antibiótico</h1>
+    <p>Estimativa da função renal e apoio ao ajuste de dose e intervalo de antimicrobianos no adulto.</p>
+  </div>
+  <div class="local-badge"><span class="local-dot"></span><span>Processamento local</span></div>
+</header>
+
+<div class="privacy-strip">
+<strong>Processamento local.</strong> Os valores digitados e os cálculos permanecem neste navegador.
+<strong>Atenção:</strong> estimativas de função renal e recomendações posológicas não substituem julgamento clínico,
+protocolo institucional, avaliação farmacêutica nem monitorização terapêutica.
+</div>
+
+<section class="layout">
+<article class="card">
+  <div class="card-titlebar">
+    <div class="title-left"><span class="step">1</span><div>
+      <h2>Função renal</h2>
+      <p>Selecione a equação. Para decisão medicamentosa, o módulo tenta expressar a função renal individual em mL/min.</p>
+    </div></div>
+    <button class="ghost" id="clearRenalBtn" type="button">Limpar</button>
+  </div>
+
+  <div class="method-row">
+    <label class="field method-field">
+      <span>Equação</span>
+      <select id="renalMethod">
+        <option value="cg">Cockcroft–Gault (CrCl)</option>
+        <option value="ckdcr">CKD-EPI 2021 — creatinina</option>
+        <option value="ckdcr_cys">CKD-EPI 2021 — creatinina + cistatina C</option>
+      </select>
+      <small>O ano 2021 refere-se às equações CKD-EPI. Cockcroft–Gault é a equação original de 1976.</small>
+    </label>
+    <label class="check-row">
+      <input id="unstableRenal" type="checkbox">
+      <span>Creatinina/função renal em rápida mudança (ex.: LRA em evolução)</span>
+    </label>
+  </div>
+
+  <div class="form-grid">
+    <label class="field"><span>Sexo</span><select id="sex"><option value="male">Masculino</option><option value="female">Feminino</option></select></label>
+    <label class="field"><span>Idade</span><div class="input-unit"><input id="age" type="number" min="18" max="120" step="1"><b>anos</b></div></label>
+    <label class="field"><span>Creatinina sérica</span><div class="input-unit"><input id="scr" type="number" min="0.1" step="0.01"><b>mg/dL</b></div></label>
+    <label class="field" id="cysField"><span>Cistatina C</span><div class="input-unit"><input id="cys" type="number" min="0.1" step="0.01"><b>mg/L</b></div></label>
+    <label class="field"><span>Peso atual</span><div class="input-unit"><input id="weight" type="number" min="1" step="0.1"><b>kg</b></div></label>
+    <label class="field" id="heightField"><span>Altura</span><div class="input-unit"><input id="height" type="number" min="100" max="230" step="0.1"><b>cm</b></div><small>Usada para superfície corporal e desindexação da CKD-EPI.</small></label>
+  </div>
+
+  <div class="action-row"><button class="primary" id="calcRenalBtn" type="button">Calcular função renal</button></div>
+  <div id="renalResult" class="result muted">Preencha os dados e calcule.</div>
+
+  <details class="calc-details">
+    <summary>Ver cálculo passo a passo</summary>
+    <div id="renalSteps" class="steps-box">O passo a passo aparecerá após o cálculo.</div>
+  </details>
+
+  <div class="source-box">
+    <strong>Referências:</strong>
+    <a href="https://www.kidney.org/ckd-epi-creatinine-equation-2021" target="_blank" rel="noopener">NKF — CKD-EPI 2021 creatinina</a>;
+    <a href="https://www.kidney.org/professionals/ckd-epi-creatinine-cystatin-equation-2021" target="_blank" rel="noopener">NKF — CKD-EPI 2021 creatinina+cistatina C</a>;
+    <a href="https://www.kidney.org/professionals/kdoqi/cockcroft-gault-equation-estimating-creatinine-clearance" target="_blank" rel="noopener">NKF — Cockcroft–Gault</a>.
+  </div>
+</article>
+
+<article class="card">
+  <div class="card-titlebar">
+    <div class="title-left"><span class="step">2</span><div>
+      <h2>Ajuste de antimicrobiano</h2>
+      <p>Use a função renal calculada acima ou informe manualmente um valor em mL/min.</p>
+    </div></div>
+  </div>
+
+  <div class="dose-top-grid">
+    <label class="field">
+      <span>Fonte da função renal</span>
+      <select id="renalSource"><option value="calculated">Usar resultado calculado acima</option><option value="manual">Inserir manualmente</option></select>
+    </label>
+    <label class="field" id="manualRenalWrap"><span>Função renal manual</span><div class="input-unit"><input id="manualRenal" type="number" min="0" step="0.1"><b>mL/min</b></div></label>
+    <label class="check-row dialysis-row"><input id="onHD" type="checkbox"><span>Hemodiálise intermitente (HD)</span></label>
+  </div>
+
+  <div class="dose-grid">
+    <label class="field"><span>Antimicrobiano</span><select id="drugSelect"></select></label>
+    <label class="field"><span>Indicação / esquema</span><select id="indicationSelect"></select></label>
+  </div>
+
+  <div class="action-row"><button class="primary" id="calcDoseBtn" type="button">Calcular ajuste</button></div>
+  <div id="doseResult" class="result muted">Selecione o antimicrobiano e calcule.</div>
+
+  <details class="calc-details">
+    <summary>Ver como o ajuste foi selecionado</summary>
+    <div id="doseSteps" class="steps-box">A faixa de função renal e a regra aplicada aparecerão aqui.</div>
+  </details>
+
+  <div class="source-box">
+    <strong>Referência posológica:</strong>
+    <a href="https://idmp.ucsf.edu/adult-antimicrobial-dosing-non-dialysis" target="_blank" rel="noopener">UCSF IDMP — Adult Antimicrobial Dosing, Non-dialysis</a> e
+    <a href="https://idmp.ucsf.edu/antimicrobial-dosing-intermittent-continuous-hemodialysis" target="_blank" rel="noopener">UCSF IDMP — Hemodialysis</a>.
+    Reconciliar com protocolo/formulário local e com a indicação clínica.
+  </div>
+</article>
+</section>
+</main>
+
+<aside class="global-module-nav" id="dadosutiGlobalNav" aria-label="Módulos MinhaUTI">
+<div class="global-module-nav-inner">
+<div class="module-nav-brand"><span class="module-nav-brand-dot"></span><span>MINHAUTI</span></div>
+<nav class="module-nav-list">
+<a class="module-nav-item" href="/"><span class="module-nav-icon">▣</span><span class="module-nav-text">Minha UTI</span></a>
+<a class="module-nav-item" href="/gasometria/"><span class="module-nav-icon">◉</span><span class="module-nav-text">Gasometria</span></a>
+<a class="module-nav-item" href="/auxiliar/"><span class="module-nav-icon">▤</span><span class="module-nav-text">Auxiliar de dados</span></a>
+<a class="module-nav-item" href="/npt/"><span class="module-nav-icon">◆</span><span class="module-nav-text">NPT</span></a>
+<a class="module-nav-item active" href="/tfg-antibiotico/" aria-current="page"><span class="module-nav-icon">Σ</span><span class="module-nav-text">TFG e ajuste ATB</span></a>
+<a class="module-nav-item" href="/escores/"><span class="module-nav-icon">▦</span><span class="module-nav-text">Escores</span></a>
+</nav>
+<div class="module-nav-footer"><span class="module-nav-status-dot"></span><span>Processamento local</span></div>
+</div>
+</aside>
+
+<script src="app.js?v=1"></script>
+</body>
+</html>
