@@ -1,0 +1,8 @@
+Base: Auxiliar original do beta atual do MinhaUTI.
+
+O fluxo PDF foi preservado.
+Foi acrescentada uma entrada separada para PNG/JPG/JPEG.
+Imagens não sofrem rotação automática.
+
+Substitua somente:
+public/app/modules/auxiliar/

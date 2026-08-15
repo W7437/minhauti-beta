@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="no-referrer" name="referrer"/>
+<meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"/>
+<meta content="no-cache" http-equiv="Pragma"/>
+<meta content="0" http-equiv="Expires"/>
+<title>MinhaUTI — Auxiliar de dados</title>
+<link href="style.css?v=minhauti1" rel="stylesheet"/>
+<link href="/app/shared/global.css?v=10.3" rel="stylesheet"/>
+<link href="/auth/auth.css?v=10.3" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/auth/auth-config.js?v=10.3"></script>
+<script src="/auth/auth.js?v=10.3"></script>
+</head>
+<body class="auth-protected"><a class="standalone-back" href="/app/main/" id="standaloneBack">← Voltar ao MinhaUTI</a>
+<main class="shell">
+<section class="layout">
+<article class="card input-card">
+<div class="card-title">
+<div>
+<span class="step">1</span>
+<h2>Arquivo PDF</h2>
+</div>
+<button class="ghost" disabled="" id="clearBtn">Limpar</button>
+</div>
+<div class="dropzone">
+<strong>Selecione o PDF de enfermagem.</strong>
+<span>Somente arquivos .pdf</span>
+<label class="file-button" for="pdfInput">Escolher arquivo</label>
+<input accept="application/pdf,.pdf" id="pdfInput" type="file"/>
+</div>
+<div class="file-name" id="fileName">Nenhum arquivo selecionado</div>
+<label class="field">
+<span>Período</span>
+<select id="periodSelect">
+<option value="24">Plantão diurno — 24 h (07:00–06:00)</option>
+<option value="12">Plantão noturno — 12 h (07:00–18:00)</option>
+</select>
+</label>
+<button class="primary action-button" disabled="" id="generateBtn">Ler PDF</button>
+<div class="image-reader-separator"></div>
+<div class="card-title image-card-title">
+  <div>
+    <span class="step image-step">IMG</span>
+    <h2>Print da tela</h2>
+  </div>
+  <button class="ghost" disabled="" id="imageClearBtn">Limpar imagem</button>
+</div>
+<div class="dropzone image-dropzone">
+  <strong>Selecione o print do balanço.</strong>
+  <span>PNG, JPG ou JPEG — a imagem não será rotacionada.</span>
+  <label class="file-button" for="imageInput">Escolher imagem</label>
+  <input accept="image/png,image/jpeg,.png,.jpg,.jpeg" id="imageInput" type="file"/>
+</div>
+<div class="file-name" id="imageFileName">Nenhuma imagem selecionada</div>
+<button class="primary action-button" disabled="" id="imageGenerateBtn">Ler imagem</button>
+<div aria-live="polite" class="progress-wrap hidden" id="progressWrap">
+<div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+<div class="status" id="statusText">Preparando…</div>
+</div>
+<div class="warnings hidden" id="warnings"></div>
+</article>
+<article class="card result-card">
+<div class="card-title">
+<div>
+<span class="step">2</span>
+<h2>Resumo</h2>
+</div>
+</div>
+<div aria-label="Resumo dos dados de enfermagem" class="summary-table">
+<div class="metric"><span class="metric-label">T</span><span class="metric-value" id="tableT"></span></div>
+<div class="metric"><span class="metric-label">DU</span><span class="metric-value" id="tableDU"></span></div>
+<div class="metric"><span class="metric-label">BH</span><span class="metric-value" id="tableBH"></span></div>
+<div class="metric"><span class="metric-label">FC</span><span class="metric-value" id="tableFC"></span></div>
+<div class="metric"><span class="metric-label">FR</span><span class="metric-value" id="tableFR"></span></div>
+<div class="metric"><span class="metric-label">SO₂</span><span class="metric-value" id="tableSO2"></span></div>
+<div class="metric"><span class="metric-label">PAS</span><span class="metric-value" id="tablePAS"></span></div>
+<div class="metric"><span class="metric-label">PAD</span><span class="metric-value" id="tablePAD"></span></div>
+<div class="metric"><span class="metric-label">PAM</span><span class="metric-value" id="tablePAM"></span></div>
+<div class="wide-metric"><span class="metric-label">HGT</span><span class="metric-value" id="tableHGT"></span></div>
+<div class="device-rows" id="deviceRows"></div>
+<div class="wide-metric"><span class="metric-label">EVAC</span><span class="metric-value" id="tableEVAC"></span></div>
+</div>
+</article>
+</section>
+<article class="card evolution-card">
+<div class="card-title">
+<div>
+<span class="step">3</span>
+<h2>Texto para evolução</h2>
+</div>
+<button class="ghost" disabled="" id="copyBtn">Copiar texto</button>
+</div>
+<pre aria-live="polite" class="evolution-text" id="result">Selecione um PDF para começar.</pre>
+</article>
+<details class="card debug-card">
+<summary>Detalhes da leitura</summary>
+<pre class="debug" id="debug">—</pre>
+</details>
+</main>
+<canvas class="hidden-canvas" id="workCanvas"></canvas>
+<script referrerpolicy="no-referrer" src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script referrerpolicy="no-referrer" src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"></script>
+<script src="app.js?v=minhauti1"></script>
+<script>if(window.self===window.top){document.documentElement.classList.add('standalone-module');}else{document.documentElement.classList.add('embedded-module');}</script></body>
+</html>
