@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="referrer" content="no-referrer" />
+  <title>Leitor de Dados de Enfermagem</title>
+  <style>
+    :root{color-scheme:light;--bg:#f2f5f9;--card:#fff;--ink:#172231;--muted:#657487;--border:#d3dce6;--blue:#173f6d;--btn:#2679b8;--soft:#edf4fb;--shadow:0 8px 24px rgba(23,43,67,.07);--warn:#7b4b00;--warnbg:#fff6df;--danger:#9c2d2d;--dangerbg:#fff0f0}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    .shell{width:min(1120px,calc(100% - 32px));margin:16px auto 34px}
+    .hero{min-height:98px;display:flex;align-items:center;padding:22px 24px;border-radius:16px;background:var(--blue);color:#fff;box-shadow:var(--shadow)}
+    .hero h1{margin:0 0 5px;font-size:clamp(25px,3.2vw,36px);line-height:1.12}.hero p{margin:0;color:rgba(255,255,255,.9);font-size:16px}
+    .privacy-strip{margin:12px 0 16px;padding:10px 13px;border:1px solid #cedceb;border-radius:10px;background:var(--soft);color:#244c72;font-size:13px}
+    .layout{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:stretch}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:15px;padding:18px;box-shadow:var(--shadow)}
+    h2{margin:0 0 14px;font-size:19px}
+    .dropzone{min-height:165px;border:2px dashed #9fb2c5;border-radius:14px;background:#fbfcfe;padding:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:7px}
+    .dropzone>strong{font-size:16px}.dropzone>span{font-size:13px;color:var(--muted)}
+    #pdfInput{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px}
+    .file-button,button{border:1px solid var(--border);border-radius:9px;padding:9px 14px;font:inherit;font-weight:700;cursor:pointer;transition:.15s ease}
+    .file-button{margin-top:7px;background:#fff}.file-button:hover,.secondary:hover:not(:disabled){background:#f6f9fc;border-color:#a9b8c7}
+    .file-name{margin-top:13px;min-height:24px;font-weight:650;overflow-wrap:anywhere}
+    .button-row{display:flex;gap:9px;margin-top:9px}button.primary{background:var(--btn);color:#fff;border-color:var(--btn)}button.secondary{background:#edf1f5;color:#334252}button:disabled{opacity:.48;cursor:not-allowed}
+    .field{display:block;margin-top:14px}.field>span{display:block;margin-bottom:5px;color:var(--muted);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+    select{width:100%;min-height:43px;border:1px solid var(--border);border-radius:9px;background:#fff;color:var(--ink);padding:8px 11px;font:inherit}
+
+    /* Tabela HTML real: evita qualquer dependência de posicionamento por CSS Grid. */
+    .summary-table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;border:1px solid #ccd6df;border-radius:12px;overflow:hidden;background:#fff}
+    .summary-table td,.summary-table th{border:0;border-right:1px solid #dbe2e9;border-bottom:1px solid #dbe2e9}
+    .summary-table tr> *:last-child{border-right:0}
+    .summary-table tbody:last-child tr:last-child> *{border-bottom:0}
+    .metric-cell{height:78px;padding:10px 8px;text-align:center;vertical-align:middle;font-weight:400}
+    .metric-label{display:block;color:#314b63;font-weight:800;font-size:15px;line-height:1.2;margin-bottom:6px}
+    .metric-value{display:block;color:var(--ink);font-size:15px;line-height:1.25;min-height:19px;white-space:nowrap}
+    .wide-row th,.wide-row td{height:47px;padding:10px 12px;vertical-align:middle}
+    .wide-label{width:126px;text-align:left;color:#314b63;font-weight:800;font-size:15px}
+    .wide-value{text-align:left;color:var(--ink);font-weight:400;font-size:15px}
+
+    .evolution-head{margin-top:18px;display:flex;align-items:center;justify-content:space-between;gap:10px}h3{margin:0;font-size:17px}button.compact{padding:8px 12px}
+    .evolution-text{margin:10px 0 0;min-height:184px;padding:14px;border:1px solid var(--border);border-radius:10px;background:#fbfcfe;color:#182332;white-space:pre-wrap;overflow-x:auto;font:600 14px/1.72 "Cascadia Mono","Consolas",monospace}
+    .progress-wrap{margin-top:14px}.progress-track{height:7px;border-radius:999px;overflow:hidden;background:#e4eaf0}.progress-bar{width:0;height:100%;background:var(--btn);transition:width .2s ease}.status{margin-top:7px;color:var(--muted);font-size:13px}
+    .warnings{margin-top:12px;padding:11px 13px;border-radius:9px;background:var(--warnbg);color:var(--warn);font-size:13px}.warnings.error{background:var(--dangerbg);color:var(--danger)}
+    .debug-card{margin-top:16px}.debug-card summary{cursor:pointer;font-weight:750}.debug{margin:12px 0 0;max-height:320px;overflow:auto;padding:12px;border:1px solid var(--border);border-radius:9px;background:#f7f9fb;font:12px/1.5 "Cascadia Mono","Consolas",monospace;white-space:pre-wrap}
+    .hidden,.hidden-canvas{display:none!important}
+    @media(max-width:860px){.layout{grid-template-columns:1fr}}
+    @media(max-width:520px){.shell{width:min(100% - 18px,1120px)}.hero{padding:18px}.hero h1{font-size:25px}.hero p{font-size:14px}.metric-cell{height:68px;padding:8px 4px}.metric-label,.metric-value,.wide-label,.wide-value{font-size:13px}.wide-label{width:88px}.button-row{flex-direction:column}.button-row button{width:100%}.evolution-head{align-items:stretch;flex-direction:column}.evolution-head button{width:100%}}
+
+    #imageInput{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px}
+    .image-reader-separator{height:1px;background:var(--border);margin:20px 0 16px}
+    .image-reader-title{margin-bottom:12px}
+    .image-dropzone{min-height:145px}
+
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="hero"><div><h1>Leitor de Dados de Enfermagem</h1><p>Leitura local de PDF e geração automática do resumo para evolução.</p></div></header>
+    <div class="privacy-strip"><strong>Processamento local.</strong> Nenhum PDF ou imagem é enviado, armazenado ou compartilhado.</div>
+
+    <section class="layout">
+      <article class="card input-card">
+        <h2>1. Arquivo PDF</h2>
+        <div class="dropzone"><strong>Selecione o PDF abaixo.</strong><span>Somente arquivos .pdf</span><label class="file-button" for="pdfInput">Escolher arquivo</label><input id="pdfInput" type="file" accept="application/pdf,.pdf" /></div>
+        <div id="fileName" class="file-name">Nenhum arquivo selecionado</div>
+        <div class="button-row"><button id="generateBtn" class="primary" disabled>Ler PDF</button><button id="clearBtn" class="secondary" disabled>Limpar</button></div>
+        <div class="image-reader-separator"></div>
+        <h2 class="image-reader-title">Print da tela</h2>
+        <div class="dropzone image-dropzone">
+          <strong>Selecione um print do balanço.</strong>
+          <span>PNG, JPG ou JPEG — sem rotação automática</span>
+          <label class="file-button" for="imageInput">Escolher imagem</label>
+          <input id="imageInput" type="file" accept="image/png,image/jpeg,.png,.jpg,.jpeg" />
+        </div>
+        <div id="imageFileName" class="file-name">Nenhuma imagem selecionada</div>
+        <div class="button-row">
+          <button id="imageGenerateBtn" class="primary" disabled>Ler imagem</button>
+          <button id="imageClearBtn" class="secondary" disabled>Limpar imagem</button>
+        </div>
+        <label class="field"><span>Período</span><select id="periodSelect"><option value="24">Plantão diurno — 24 h (07:00–06:00)</option><option value="12">Plantão noturno — 12 h (07:00–18:00)</option></select></label>
+        <div id="progressWrap" class="progress-wrap hidden" aria-live="polite"><div class="progress-track"><div id="progressBar" class="progress-bar"></div></div><div id="statusText" class="status">Preparando…</div></div>
+        <div id="warnings" class="warnings hidden"></div>
+      </article>
+
+      <article class="card result-card">
+        <h2>2. Resumo</h2>
+        <table class="summary-table" aria-label="Resumo dos dados de enfermagem">
+          <tbody>
+            <tr>
+              <td class="metric-cell"><span class="metric-label">T</span><span id="tableT" class="metric-value"></span></td>
+              <td class="metric-cell"><span class="metric-label">DU</span><span id="tableDU" class="metric-value"></span></td>
+              <td class="metric-cell"><span class="metric-label">BH</span><span id="tableBH" class="metric-value"></span></td>
+            </tr>
+            <tr>
+              <td class="metric-cell"><span class="metric-label">FC</span><span id="tableFC" class="metric-value"></span></td>
+              <td class="metric-cell"><span class="metric-label">FR</span><span id="tableFR" class="metric-value"></span></td>
+              <td class="metric-cell"><span class="metric-label">SO₂</span><span id="tableSO2" class="metric-value"></span></td>
+            </tr>
+            <tr>
+              <td class="metric-cell"><span class="metric-label">PAS</span><span id="tablePAS" class="metric-value"></span></td>
+              <td class="metric-cell"><span class="metric-label">PAD</span><span id="tablePAD" class="metric-value"></span></td>
+              <td class="metric-cell"><span class="metric-label">PAM</span><span id="tablePAM" class="metric-value"></span></td>
+            </tr>
+            <tr class="wide-row"><th scope="row" class="wide-label">HGT</th><td colspan="2" id="tableHGT" class="wide-value"></td></tr>
+          </tbody>
+          <tbody id="deviceRows"></tbody>
+          <tbody>
+            <tr class="wide-row"><th scope="row" class="wide-label">EVAC</th><td colspan="2" id="tableEVAC" class="wide-value"></td></tr>
+          </tbody>
+        </table>
+        <div class="evolution-head"><h3>Texto para evolução</h3><button id="copyBtn" class="primary compact" disabled>Copiar texto</button></div>
+        <pre id="result" class="evolution-text" aria-live="polite">Selecione um PDF ou uma imagem para começar.</pre>
+      </article>
+    </section>
+
+    <details class="card debug-card"><summary>Detalhes da leitura</summary><pre id="debug" class="debug">—</pre></details>
+  </main>
+  <canvas id="workCanvas" class="hidden-canvas"></canvas>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js" referrerpolicy="no-referrer"></script>
+  <script src="app.js?v=7"></script>
+</body>
+</html>
