@@ -1,0 +1,14 @@
+Auxiliar beta — até 2 imagens por paciente
+
+PDF:
+- permanece intacto.
+
+Imagens:
+- aceita 1 ou 2 PNG/JPG/JPEG;
+- as imagens não são rotacionadas;
+- a ordem não importa;
+- o OCR das páginas é combinado em um único resumo;
+- útil quando balanço hídrico e sinais vitais estão em páginas diferentes.
+
+Substitua apenas:
+public/app/modules/auxiliar/
