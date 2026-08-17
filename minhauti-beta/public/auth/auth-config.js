@@ -2,7 +2,7 @@
    A publishable key é pública e pode ficar no navegador.
    NUNCA coloque a sb_secret_* neste arquivo. */
 window.MINHAUTI_AUTH = {
-  supabaseUrl: "https://pcyzmkzdqfmzqmjjsbdp.supabase.co",
+  supabaseUrl: "https://pcyzmkzdqfmzqmijsbdp.supabase.co",
   supabaseAnonKey: "sb_publishable_mjlpst0T2dlZvh0y0LXhcQ_HYtIw_iF",
   authApiBase: "",
   loginPath: "/auth/login.html",
