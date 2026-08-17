@@ -30,7 +30,6 @@ function forwardedIp(request) {
 }
 
 async function adminRest(env, path) {
-  // New Supabase sb_secret_* keys belong in the apikey header, not Bearer.
   return fetch(`${env.SUPABASE_URL}${path}`, {
     headers: {
       apikey: env.SUPABASE_SECRET_KEY,
@@ -44,8 +43,12 @@ async function publicAuth(env, path, body, request) {
     "Content-Type": "application/json",
     apikey: env.SUPABASE_PUBLISHABLE_KEY,
   };
+
   const ip = forwardedIp(request);
-  if (ip) headers["Sb-Forwarded-For"] = ip;
+
+  if (ip) {
+    headers["Sb-Forwarded-For"] = ip;
+  }
 
   return fetch(`${env.SUPABASE_URL}${path}`, {
     method: "POST",
@@ -56,6 +59,7 @@ async function publicAuth(env, path, body, request) {
 
 async function login(request, env) {
   const body = await request.json().catch(() => ({}));
+
   const username = normalizeUsername(body.username);
   const password = String(body.password || "");
 
@@ -76,25 +80,40 @@ async function login(request, env) {
 
   if (!profileResponse.ok) {
     console.error("profile_lookup_failed", profileResponse.status);
-    return json({ error: "Usuário ou senha inválidos." }, 401);
+
+    return json(
+      { error: "Usuário ou senha inválidos." },
+      401
+    );
   }
 
   const rows = await profileResponse.json();
-  const profile = Array.isArray(rows) ? rows[0] : null;
+
+  const profile =
+    Array.isArray(rows) ? rows[0] : null;
 
   if (!profile || profile.active === false) {
-    return json({ error: "Usuário ou senha inválidos." }, 401);
+    return json(
+      { error: "Usuário ou senha inválidos." },
+      401
+    );
   }
 
   const authResponse = await publicAuth(
     env,
     "/auth/v1/token?grant_type=password",
-    { email: profile.email, password },
+    {
+      email: profile.email,
+      password,
+    },
     request
   );
 
   if (!authResponse.ok) {
-    return json({ error: "Usuário ou senha inválidos." }, 401);
+    return json(
+      { error: "Usuário ou senha inválidos." },
+      401
+    );
   }
 
   const data = await authResponse.json();
@@ -109,77 +128,172 @@ async function login(request, env) {
 
 async function signup(request, env) {
   const body = await request.json().catch(() => ({}));
-  const email = String(body.email || "").trim().toLowerCase();
-  const username = normalizeUsername(body.username);
-  const password = String(body.password || "");
-  const acceptedTerms = body.acceptedTerms === true;
+
+  const email =
+    String(body.email || "").trim().toLowerCase();
+
+  const username =
+    normalizeUsername(body.username);
+
+  const password =
+    String(body.password || "");
+
+  const acceptedTerms =
+    body.acceptedTerms === true;
 
   if (!acceptedTerms) {
-    return json({ error: "É necessário concordar com as Políticas de uso." }, 400);
-  }
-  if (!validEmail(email)) {
-    return json({ error: "Informe um e-mail válido." }, 400);
-  }
-  if (!validUsername(username)) {
-    return json({
-      error: "O usuário deve ter 3 a 32 caracteres e usar apenas letras, números, ponto, hífen ou sublinhado."
-    }, 400);
-  }
-  if (password.length < 8) {
-    return json({ error: "A senha deve ter pelo menos 8 caracteres." }, 400);
+    return json(
+      {
+        error:
+          "É necessário concordar com as Políticas de uso.",
+      },
+      400
+    );
   }
 
-  // Clear username uniqueness feedback before attempting Auth signup.
+  if (!validEmail(email)) {
+    return json(
+      { error: "Informe um e-mail válido." },
+      400
+    );
+  }
+
+  if (!validUsername(username)) {
+    return json(
+      {
+        error:
+          "O usuário deve ter 3 a 32 caracteres e usar apenas letras, números, ponto, hífen ou sublinhado.",
+      },
+      400
+    );
+  }
+
+  if (password.length < 8) {
+    return json(
+      {
+        error:
+          "A senha deve ter pelo menos 8 caracteres.",
+      },
+      400
+    );
+  }
+
   const params = new URLSearchParams({
     username: `eq.${username}`,
     select: "id",
     limit: "1",
   });
-  const check = await adminRest(env, `/rest/v1/profiles?${params.toString()}`);
+
+  const check = await adminRest(
+    env,
+    `/rest/v1/profiles?${params.toString()}`
+  );
+
   if (check.ok) {
     const rows = await check.json();
+
     if (Array.isArray(rows) && rows.length) {
-      return json({ error: "Este nome de usuário já está em uso." }, 409);
+      return json(
+        {
+          error:
+            "Este nome de usuário já está em uso.",
+        },
+        409
+      );
     }
   }
 
-  const redirectTo = `${env.PUBLIC_ORIGIN}/auth/login.html`;
+  const redirectTo =
+    `${env.PUBLIC_ORIGIN}/auth/login.html`;
+
   const authResponse = await publicAuth(
     env,
-    `/auth/v1/signup?redirect_to=${encodeURIComponent(redirectTo)}`,
+    `/auth/v1/signup?redirect_to=${encodeURIComponent(
+      redirectTo
+    )}`,
     {
       email,
       password,
       data: {
         username,
-        terms_accepted_at: new Date().toISOString(),
+        terms_accepted_at:
+          new Date().toISOString(),
       },
     },
     request
   );
 
-  const data = await authResponse.json().catch(() => ({}));
+  const data =
+    await authResponse
+      .json()
+      .catch(() => ({}));
 
   if (!authResponse.ok) {
-  const raw = String(data.msg || data.message || data.error_description || JSON.stringify(data));
+    const raw = String(
+      data.msg ||
+      data.message ||
+      data.error_description ||
+      JSON.stringify(data)
+    );
 
-  if (/already|registered|exists/i.test(raw)) {
-    return json({ error: "Já existe uma conta vinculada a este e-mail." }, 409);
+    console.error(
+      "supabase_signup_failed",
+      authResponse.status,
+      raw
+    );
+
+    if (
+      /already|registered|exists/i.test(raw)
+    ) {
+      return json(
+        {
+          error:
+            "Já existe uma conta vinculada a este e-mail.",
+        },
+        409
+      );
+    }
+
+    return json(
+      {
+        error:
+          raw ||
+          "Não foi possível criar a conta.",
+      },
+      400
+    );
   }
 
-  return json({ error: raw || "Não foi possível criar a conta." }, 400);
+  return json(
+    {
+      ok: true,
+      message:
+        "Conta criada. Verifique seu e-mail para confirmar o cadastro.",
+    },
+    201
+  );
 }
 
 async function recover(request, env) {
-  const body = await request.json().catch(() => ({}));
-  const email = String(body.email || "").trim().toLowerCase();
+  const body =
+    await request
+      .json()
+      .catch(() => ({}));
 
-  // Always return a neutral success response to avoid account enumeration.
+  const email =
+    String(body.email || "")
+      .trim()
+      .toLowerCase();
+
   if (validEmail(email)) {
-    const redirectTo = `${env.PUBLIC_ORIGIN}/auth/redefinir-senha.html`;
+    const redirectTo =
+      `${env.PUBLIC_ORIGIN}/auth/redefinir-senha.html`;
+
     await publicAuth(
       env,
-      `/auth/v1/recover?redirect_to=${encodeURIComponent(redirectTo)}`,
+      `/auth/v1/recover?redirect_to=${encodeURIComponent(
+        redirectTo
+      )}`,
       { email },
       request
     ).catch(() => null);
@@ -187,34 +301,74 @@ async function recover(request, env) {
 
   return json({
     ok: true,
-    message: "Se existir uma conta vinculada a este e-mail, as instruções de recuperação serão enviadas."
+    message:
+      "Se existir uma conta vinculada a este e-mail, as instruções de recuperação serão enviadas.",
   });
 }
 
 async function handleApi(request, env) {
   if (!safeOrigin(request, env)) {
-    return json({ error: "Origem não autorizada." }, 403);
+    return json(
+      { error: "Origem não autorizada." },
+      403
+    );
   }
 
   const url = new URL(request.url);
 
   if (request.method !== "POST") {
-    return json({ error: "Método não permitido." }, 405);
+    return json(
+      { error: "Método não permitido." },
+      405
+    );
   }
 
   if (!env.SUPABASE_SECRET_KEY) {
-    console.error("SUPABASE_SECRET_KEY is not configured");
-    return json({ error: "Autenticação ainda não configurada no servidor." }, 503);
+    console.error(
+      "SUPABASE_SECRET_KEY is not configured"
+    );
+
+    return json(
+      {
+        error:
+          "Autenticação ainda não configurada no servidor.",
+      },
+      503
+    );
   }
 
   try {
-    if (url.pathname === "/api/auth/login") return await login(request, env);
-    if (url.pathname === "/api/auth/signup") return await signup(request, env);
-    if (url.pathname === "/api/auth/recover") return await recover(request, env);
-    return json({ error: "Rota não encontrada." }, 404);
+    if (url.pathname === "/api/auth/login") {
+      return await login(request, env);
+    }
+
+    if (url.pathname === "/api/auth/signup") {
+      return await signup(request, env);
+    }
+
+    if (url.pathname === "/api/auth/recover") {
+      return await recover(request, env);
+    }
+
+    return json(
+      { error: "Rota não encontrada." },
+      404
+    );
   } catch (err) {
-    console.error("auth_api_error", err?.stack || err?.message || err);
-    return json({ error: "Não foi possível concluir a operação." }, 500);
+    console.error(
+      "auth_api_error",
+      err?.stack ||
+      err?.message ||
+      err
+    );
+
+    return json(
+      {
+        error:
+          "Não foi possível concluir a operação.",
+      },
+      500
+    );
   }
 }
 
