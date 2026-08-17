@@ -45,7 +45,6 @@ async function publicAuth(env, path, body, request) {
   };
 
   const ip = forwardedIp(request);
-
   if (ip) {
     headers["Sb-Forwarded-For"] = ip;
   }
@@ -59,7 +58,6 @@ async function publicAuth(env, path, body, request) {
 
 async function login(request, env) {
   const body = await request.json().catch(() => ({}));
-
   const username = normalizeUsername(body.username);
   const password = String(body.password || "");
 
@@ -80,23 +78,14 @@ async function login(request, env) {
 
   if (!profileResponse.ok) {
     console.error("profile_lookup_failed", profileResponse.status);
-
-    return json(
-      { error: "Usuário ou senha inválidos." },
-      401
-    );
+    return json({ error: "Usuário ou senha inválidos." }, 401);
   }
 
   const rows = await profileResponse.json();
-
-  const profile =
-    Array.isArray(rows) ? rows[0] : null;
+  const profile = Array.isArray(rows) ? rows[0] : null;
 
   if (!profile || profile.active === false) {
-    return json(
-      { error: "Usuário ou senha inválidos." },
-      401
-    );
+    return json({ error: "Usuário ou senha inválidos." }, 401);
   }
 
   const authResponse = await publicAuth(
@@ -110,10 +99,7 @@ async function login(request, env) {
   );
 
   if (!authResponse.ok) {
-    return json(
-      { error: "Usuário ou senha inválidos." },
-      401
-    );
+    return json({ error: "Usuário ou senha inválidos." }, 401);
   }
 
   const data = await authResponse.json();
@@ -129,33 +115,20 @@ async function login(request, env) {
 async function signup(request, env) {
   const body = await request.json().catch(() => ({}));
 
-  const email =
-    String(body.email || "").trim().toLowerCase();
-
-  const username =
-    normalizeUsername(body.username);
-
-  const password =
-    String(body.password || "");
-
-  const acceptedTerms =
-    body.acceptedTerms === true;
+  const email = String(body.email || "").trim().toLowerCase();
+  const username = normalizeUsername(body.username);
+  const password = String(body.password || "");
+  const acceptedTerms = body.acceptedTerms === true;
 
   if (!acceptedTerms) {
     return json(
-      {
-        error:
-          "É necessário concordar com as Políticas de uso.",
-      },
+      { error: "É necessário concordar com as Políticas de uso." },
       400
     );
   }
 
   if (!validEmail(email)) {
-    return json(
-      { error: "Informe um e-mail válido." },
-      400
-    );
+    return json({ error: "Informe um e-mail válido." }, 400);
   }
 
   if (!validUsername(username)) {
@@ -170,10 +143,7 @@ async function signup(request, env) {
 
   if (password.length < 8) {
     return json(
-      {
-        error:
-          "A senha deve ter pelo menos 8 caracteres.",
-      },
+      { error: "A senha deve ter pelo menos 8 caracteres." },
       400
     );
   }
@@ -194,10 +164,7 @@ async function signup(request, env) {
 
     if (Array.isArray(rows) && rows.length) {
       return json(
-        {
-          error:
-            "Este nome de usuário já está em uso.",
-        },
+        { error: "Este nome de usuário já está em uso." },
         409
       );
     }
@@ -208,43 +175,47 @@ async function signup(request, env) {
 
   const authResponse = await publicAuth(
     env,
-    `/auth/v1/signup?redirect_to=${encodeURIComponent(
-      redirectTo
-    )}`,
+    `/auth/v1/signup?redirect_to=${encodeURIComponent(redirectTo)}`,
     {
       email,
       password,
       data: {
         username,
-        terms_accepted_at:
-          new Date().toISOString(),
+        terms_accepted_at: new Date().toISOString(),
       },
     },
     request
   );
 
-  const data =
-    await authResponse
-      .json()
-      .catch(() => ({}));
+  const rawText = await authResponse.text();
+
+  console.error(
+    "supabase_signup_response",
+    "status:",
+    authResponse.status,
+    "statusText:",
+    authResponse.statusText,
+    "body:",
+    rawText
+  );
 
   if (!authResponse.ok) {
-    const raw = String(
-      data.msg ||
-      data.message ||
-      data.error_description ||
-      JSON.stringify(data)
+    let parsed = {};
+
+    try {
+      parsed = JSON.parse(rawText);
+    } catch {}
+
+    const detail = String(
+      parsed.msg ||
+      parsed.message ||
+      parsed.error_description ||
+      parsed.error ||
+      rawText ||
+      "Resposta vazia"
     );
 
-    console.error(
-      "supabase_signup_failed",
-      authResponse.status,
-      raw
-    );
-
-    if (
-      /already|registered|exists/i.test(raw)
-    ) {
+    if (/already|registered|exists/i.test(detail)) {
       return json(
         {
           error:
@@ -257,8 +228,7 @@ async function signup(request, env) {
     return json(
       {
         error:
-          raw ||
-          "Não foi possível criar a conta.",
+          `Supabase HTTP ${authResponse.status}: ${detail}`,
       },
       400
     );
@@ -275,15 +245,8 @@ async function signup(request, env) {
 }
 
 async function recover(request, env) {
-  const body =
-    await request
-      .json()
-      .catch(() => ({}));
-
-  const email =
-    String(body.email || "")
-      .trim()
-      .toLowerCase();
+  const body = await request.json().catch(() => ({}));
+  const email = String(body.email || "").trim().toLowerCase();
 
   if (validEmail(email)) {
     const redirectTo =
@@ -291,9 +254,7 @@ async function recover(request, env) {
 
     await publicAuth(
       env,
-      `/auth/v1/recover?redirect_to=${encodeURIComponent(
-        redirectTo
-      )}`,
+      `/auth/v1/recover?redirect_to=${encodeURIComponent(redirectTo)}`,
       { email },
       request
     ).catch(() => null);
