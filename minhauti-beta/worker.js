@@ -161,17 +161,13 @@ async function signup(request, env) {
   const data = await authResponse.json().catch(() => ({}));
 
   if (!authResponse.ok) {
-    const raw = String(data.msg || data.message || "");
-    if (/already|registered|exists/i.test(raw)) {
-      return json({ error: "Já existe uma conta vinculada a este e-mail." }, 409);
-    }
-    return json({ error: "Não foi possível criar a conta." }, 400);
+  const raw = String(data.msg || data.message || data.error_description || JSON.stringify(data));
+
+  if (/already|registered|exists/i.test(raw)) {
+    return json({ error: "Já existe uma conta vinculada a este e-mail." }, 409);
   }
 
-  return json({
-    ok: true,
-    message: "Conta criada. Verifique seu e-mail para confirmar o cadastro."
-  }, 201);
+  return json({ error: raw || "Não foi possível criar a conta." }, 400);
 }
 
 async function recover(request, env) {
