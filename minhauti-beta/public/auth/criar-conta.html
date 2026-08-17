@@ -27,7 +27,7 @@ const cfg=window.MINHAUTI_AUTH||{}, msg=document.getElementById('msg'), btn=docu
 function show(t,k){msg.textContent=t;msg.className='auth-message '+k}
 form.addEventListener('submit',async e=>{
  e.preventDefault();msg.className='auth-message';
- if(password.value!==confirm.value){show('As senhas não coincidem.','error');return}
+ if(document.getElementById('password').value !== document.getElementById('confirm').value){show('As senhas não coincidem.','error');return}
  btn.disabled=true;
  try{
    const r=await fetch((cfg.authApiBase||'')+'/api/auth/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email.value.trim(),username:username.value.trim(),password:password.value,acceptedTerms:agree.checked})});
