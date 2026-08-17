@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="no-referrer" name="referrer"/>
+<meta content="MinhaUTI — ferramenta rápida para interpretação de gasometria arterial e venosa central." name="description"/>
+<title>MinhaUTI — Gasometria</title>
+<link href="style.css?v=minhauti1" rel="stylesheet"/>
+<link href="/app/shared/global.css?v=10.4" rel="stylesheet"/>
+<link href="/auth/auth.css?v=10.4" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/auth/auth-config.js?v=10.4"></script>
+<script src="/auth/auth.js?v=10.4"></script>
+</head>
+<body class="auth-protected"><a class="standalone-back" href="/app/main/" id="standaloneBack">← Voltar ao MinhaUTI</a>
+<main class="shell">
+<section class="workspace">
+<form autocomplete="off" class="card input-card" id="gasForm">
+<div class="card-title">
+<div>
+<span class="step">1</span>
+<h2>Dados</h2>
+</div>
+<button class="ghost" id="clearBtn" type="button">Limpar</button>
+</div>
+<h3>Gasometria arterial</h3>
+<div class="grid grid-3">
+<label>pH<input inputmode="decimal" name="ph" placeholder="7,35"/></label>
+<label>PaCO₂ <small>mmHg</small><input inputmode="decimal" name="paco2" placeholder="40"/></label>
+<label>HCO₃⁻ <small>mEq/L</small><input inputmode="decimal" name="hco3" placeholder="24"/></label>
+<label>PaO₂ <small>mmHg</small><input inputmode="decimal" name="pao2" placeholder="80"/></label>
+<label>SaO₂ <small>%</small><input inputmode="decimal" name="sao2" placeholder="96"/></label>
+<label>BE <small>mEq/L</small><input inputmode="decimal" name="be" placeholder="0"/></label>
+<label>Lactato <small>mmol/L</small><input inputmode="decimal" name="lactate" placeholder="1,2"/></label>
+<label>FiO₂ <small>%</small><input inputmode="decimal" name="fio2" placeholder="21"/></label>
+</div>
+<div class="grid grid-3 anion-inline-grid">
+<label>Na⁺ <small>mEq/L</small><input inputmode="decimal" name="na" placeholder="140"/></label>
+<label>Cl⁻ <small>mEq/L</small><input inputmode="decimal" name="cl" placeholder="104"/></label>
+<label>Albumina <small>g/dL</small><input inputmode="decimal" name="albumin" placeholder="4,0"/></label>
+</div>
+<details class="optional">
+<summary>Gasometria venosa central <span>opcional</span></summary>
+<div class="grid grid-2 inner-grid">
+<label>PvCO₂ <small>mmHg</small><input inputmode="decimal" name="pvco2" placeholder="46"/></label>
+<label>ScvO₂ <small>%</small><input inputmode="decimal" name="scvo2" placeholder="72"/></label>
+</div>
+<p class="hint">O Gap CO₂ é calculado como PvCO₂ − PaCO₂ quando ambos estão disponíveis.</p>
+</details>
+<div class="validation hidden" id="validation" role="alert"></div>
+<button class="primary" type="submit">Analisar gasometria</button>
+</form>
+<section class="card output-card">
+<div class="card-title">
+<div>
+<span class="step">2</span>
+<h2>Análise</h2>
+</div>
+<button class="ghost" disabled="" id="copyBtn" type="button">Copiar resumo</button>
+</div>
+<div class="empty-state" id="emptyState">
+          Preencha pH, PaCO₂ e HCO₃⁻ para iniciar a interpretação ácido-básica.
+        </div>
+<div class="results hidden" id="results">
+<section class="result-section">
+<h3>Distúrbio ácido-básico</h3>
+<div class="result-box" id="primaryResult"></div>
+</section>
+<section class="result-section hidden" id="compSection">
+<h3>Compensação</h3>
+<div class="result-box" id="compResult"></div>
+</section>
+<section class="result-section hidden" id="agSection">
+<h3>Anion Gap</h3>
+<div class="result-box" id="agResult"></div>
+</section>
+<section class="result-section hidden" id="oxygenSection">
+<h3>Oxigenação</h3>
+<div class="result-box" id="oxygenResult"></div>
+</section>
+<section class="result-section hidden" id="perfusionSection">
+<h3>Perfusão / gasometria venosa central</h3>
+<div class="result-box" id="perfusionResult"></div>
+</section>
+<section class="result-section summary-section">
+<div class="summary-head">
+<h3>Texto curto</h3>
+<span>formato para transcrição no prontuário</span>
+</div>
+<textarea id="summaryText" readonly=""></textarea>
+</section>
+</div>
+</section>
+</section>
+<details class="card sources-card">
+<summary>Fontes clínicas e regras utilizadas</summary>
+<div class="sources">
+<p><strong>Ácido-base e compensações:</strong> Merck Manual Professional — Acid-Base Disorders.</p>
+<p><strong>Winter e Anion Gap:</strong> Merck Manual Professional / NCBI.</p>
+<p><strong>Gap Pv-aCO₂:</strong> Ltaief, Schneider &amp; Liaudet, Critical Care 2021.</p>
+<p class="disclaimer">Ferramenta de apoio à interpretação. Os resultados devem ser correlacionados com o contexto clínico, tempo de evolução, ventilação, função renal e demais exames.</p>
+</div>
+</details>
+</main>
+<script src="app.js?v=minhauti1"></script>
+<script>if(window.self===window.top){document.documentElement.classList.add('standalone-module');}else{document.documentElement.classList.add('embedded-module');}</script></body>
+</html>

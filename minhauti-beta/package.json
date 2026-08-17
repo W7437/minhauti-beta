@@ -1,0 +1,12 @@
+{
+  "name": "minhauti",
+  "private": true,
+  "version": "10.4.0",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "4.123.0"
+  }
+}

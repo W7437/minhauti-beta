@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="no-referrer" name="referrer"/>
+<meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"/>
+<meta content="no-cache" http-equiv="Pragma"/>
+<meta content="0" http-equiv="Expires"/>
+<title>MinhaUTI — Escores</title>
+<link href="style.css?v=2" rel="stylesheet"/>
+<link href="/app/shared/global.css?v=10.4" rel="stylesheet"/>
+<link href="/auth/auth.css?v=10.4" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/auth/auth-config.js?v=10.4"></script>
+<script src="/auth/auth.js?v=10.4"></script>
+</head>
+<body class="auth-protected"><a class="standalone-back" href="/app/main/" id="standaloneBack">← Voltar ao MinhaUTI</a>
+<main class="shell">
+<section class="score-layout score-layout-simple">
+<section class="workspace">
+<article class="card selector-card">
+<div class="card-titlebar">
+<div>
+<span class="step">1</span>
+<div>
+<h2>Escolher escore</h2>
+<p>Digite o nome, sigla ou situação clínica. O escore correspondente aparece imediatamente para seleção.</p>
+</div>
+</div>
+</div>
+<div class="search-box">
+<input aria-autocomplete="list" aria-controls="scoreSuggestions" autocomplete="off" id="scoreSearch" placeholder="Comece a digitar: SOFA, sepse, TEP, pneumonia..." type="text"/>
+<div class="autocomplete hidden" id="scoreSuggestions" role="listbox"></div>
+</div>
+</article>
+<article class="card calculator-card" id="calculatorCard">
+<div class="empty-calculator" id="emptyCalculator">
+<div class="empty-icon">▦</div>
+<strong>Selecione um escore acima.</strong>
+<span>O formulário aparecerá aqui. Quando houver dados compatíveis no leito ativo, eles serão pré-preenchidos.</span>
+</div>
+<div class="hidden" id="calculatorContent"></div>
+</article>
+</section>
+</section>
+</main>
+
+<script src="app.js?v=2"></script>
+<script>if(window.self===window.top){document.documentElement.classList.add('standalone-module');}else{document.documentElement.classList.add('embedded-module');}</script></body>
+</html>

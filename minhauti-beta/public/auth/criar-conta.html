@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Criar conta — MinhaUTI</title><link rel="stylesheet" href="/auth/auth.css?v=10.4"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/auth/auth-config.js?v=10.4"></script></head>
+<body class="auth-page"><div class="auth-layout">
+<header class="auth-topbar"><div class="auth-topbar-inner"><div class="auth-brand"><div class="auth-brand-mark" aria-label="Logo MinhaUTI">
+<svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="authlg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0a69b0"/><stop offset="100%" stop-color="#24c1bb"/></linearGradient></defs><rect x="5" y="5" width="54" height="54" rx="13" ry="13" fill="none" stroke="url(#authlg)" stroke-width="3"/><path d="M8 34h10l4-8 5 19 6-28 6 22 4-9 4 4h9" fill="none" stroke="#24c1bb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</div><div class="auth-brand-title">Minha<span>UTI</span></div></div><div class="auth-status"><span class="auth-status-dot"></span>Cadastro seguro</div></div></header>
+<main class="auth-main"><section class="auth-intro"><h1>Criar conta</h1><p>Cadastre as credenciais que serão usadas para acessar o ambiente da sua UTI.</p></section>
+<section class="auth-card"><h2>Nova conta</h2><div class="auth-subtitle">E-mail, usuário e senha.</div>
+<form id="form">
+<label>E-mail<input id="email" type="email" autocomplete="email" required/></label>
+<div class="auth-hint">Usado para recuperação de senha e comunicações da conta.</div>
+<label>Usuário<input id="username" type="text" autocomplete="username" required minlength="3" maxlength="32"/></label>
+<div class="auth-hint">3 a 32 caracteres: letras, números, ponto, hífen ou sublinhado.</div>
+<label>Senha<input id="password" type="password" autocomplete="new-password" required minlength="8"/></label>
+<label>Confirmar senha<input id="confirm" type="password" autocomplete="new-password" required minlength="8"/></label>
+<label class="auth-agreement"><input id="agree" type="checkbox" required/><span>Li e concordo com as <a href="/legal/politicas.html" target="_blank" rel="noopener">Políticas de uso</a>.</span></label>
+<button class="auth-primary" id="submit" type="submit">Criar conta</button>
+</form>
+<div class="auth-footlink">Já possui uma conta? <a href="/auth/login.html">Entrar</a></div>
+<div id="msg" class="auth-message"></div></section></main>
+<footer class="auth-footer">MinhaUTI</footer></div>
+<script>
+const cfg=window.MINHAUTI_AUTH||{}, msg=document.getElementById('msg'), btn=document.getElementById('submit');
+function show(t,k){msg.textContent=t;msg.className='auth-message '+k}
+form.addEventListener('submit',async e=>{
+ e.preventDefault();msg.className='auth-message';
+ if(password.value!==confirm.value){show('As senhas não coincidem.','error');return}
+ btn.disabled=true;
+ try{
+   const r=await fetch((cfg.authApiBase||'')+'/api/auth/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email.value.trim(),username:username.value.trim(),password:password.value,acceptedTerms:agree.checked})});
+   const d=await r.json().catch(()=>({}));
+   if(!r.ok)throw new Error(d.error||'Não foi possível criar a conta.');
+   show(d.message||'Conta criada. Verifique seu e-mail.','ok');form.reset();
+ }catch(err){show(err.message||'Não foi possível criar a conta.','error')}
+ finally{btn.disabled=false}
+});
+</script></body></html>
