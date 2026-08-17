@@ -4,7 +4,7 @@
   "main": "./worker.js",
   "compatibility_date": "2026-08-17",
   "vars": {
-    "SUPABASE_URL": "https://pcyzmkzdqfmzqmjjsbdp.supabase.co",
+    "SUPABASE_URL": "https://pcyzmkzdqfmzqmijsbdp.supabase.co",
     "SUPABASE_PUBLISHABLE_KEY": "sb_publishable_mjlpst0T2dlZvh0y0LXhcQ_HYtIw_iF",
     "PUBLIC_ORIGIN": "https://dadosuti.com.br"
   },
